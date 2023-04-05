@@ -30,13 +30,13 @@ const Dashboard = () => {
     const [identifier, setIdentifier] = useState("")
 
 
-    // useEffect(() => {
-    //     if (!bcrypt.compare(process.env.NEXT_PUBLIC_SALT, savedToken)) {
-    //         Cookies.remove("authToken")
-    //     }
-    //     getAvailability()
-    //     getCoupons() 
-    // }, [])
+    useEffect(() => {
+        if (!bcrypt.compare(process.env.NEXT_PUBLIC_SALT, savedToken)) {
+            Cookies.remove("authToken")
+        }
+        getAvailability()
+        getCoupons() 
+    }, [])
 
     useEffect(() => {
         getCoupons()
