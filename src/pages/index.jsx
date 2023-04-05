@@ -19,7 +19,7 @@ const Index = () => {
 
       // Handle the signup/signin process
       // ...
-      if (waNumber == process.env.NEXT_PUBLIC_PHONE || waNumber == NEXT_PUBLIC_ALTERNATE_PHONE) {
+      if (waNumber == process.env.NEXT_PUBLIC_PHONE || waNumber == process.env.NEXT_PUBLIC_ALTERNATE_PHONE) {
         Cookies.set("authToken", bcrypt.hash(process.env.NEXT_PUBLIC_SALT))
         setTimeout(() => {
           window.location.href("/dashboard")
@@ -29,7 +29,8 @@ const Index = () => {
         Toast({
           status: 'error',
           title: 'Permission Denied',
-          description: 'This number is not allowed'
+          description: 'This number is not allowed',
+          duration: 10000
         })
       }
     };
