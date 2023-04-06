@@ -22,7 +22,7 @@ const Index = () => {
       if (waNumber == process.env.NEXT_PUBLIC_PHONE || waNumber == process.env.NEXT_PUBLIC_ALTERNATE_PHONE) {
         Cookies.set("authToken", bcrypt.hash(process.env.NEXT_PUBLIC_SALT))
         setTimeout(() => {
-          window.location.href("/dashboard")
+          window.location.assign("/dashboard")
         }, 2000)
       }
       else{
