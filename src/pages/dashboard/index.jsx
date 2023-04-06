@@ -31,9 +31,10 @@ const Dashboard = () => {
 
 
     useEffect(() => {
-        if (!bcrypt.compare(process.env.NEXT_PUBLIC_SALT, savedToken)) {
-            Cookies.remove("authToken")
-        }
+        // if (!savedToken || !bcrypt.compare(savedToken, process.env.NEXT_PUBLIC_SALT)) {
+        //     Cookies.remove("authToken")
+        //     window.location.assign("/")
+        // }
         getAvailability()
         getCoupons() 
     }, [])
@@ -46,18 +47,15 @@ const Dashboard = () => {
     function logout() {
         Cookies.remove("authToken")
         setTimeout(() => {
-            window.location.href('/')
+            window.location.assign('/')
         }, 2000)
     }
 
     function getAvailability() {
         axios.get('/api/absent').then(res => {
-            setAbsentDates(res.data.dates || [])
+            setAbsentDates(res.data[0].dates || [])
         }).catch(err => {
-            Toast({
-                status: 'error',
-                description: "Could not fetch your availability"
-            })
+            console.log(err)
         })
     }
     function getCoupons() {
@@ -80,7 +78,12 @@ const Dashboard = () => {
             identifier: identifier
         }).then(res => {
             getCoupons()
+            Toast({
+                status: 'success',
+                description: 'Coupon created!'
+            })
         }).catch(err => {
+            console.log(err)
             Toast({
                 status: 'error',
                 description: "Could not create coupon"
@@ -93,6 +96,10 @@ const Dashboard = () => {
             code: couponCode,
         }).then(res => {
             getCoupons()
+            Toast({
+                status: 'success',
+                description: 'Coupons updated!'
+            })
         }).catch(err => {
             Toast({
                 status: 'error',
@@ -104,6 +111,10 @@ const Dashboard = () => {
     function updateAvailability() {
         axios.post('/api/absent', { dates: absentDates }).then(res => {
             getAvailability()
+            Toast({
+                status: 'success',
+                description: 'Availability updated!'
+            })
         }).catch(err => {
             Toast({
                 status: 'error',
@@ -137,30 +148,15 @@ const Dashboard = () => {
                                 value={absentDates}
                                 options={{
                                     mode: 'multiple',
-                                    allowInput: false
+                                    allowInput: false,
+                                    defaultDate: absentDates,
+                                    dateFormat: 'd-m-Y'
                                 }}
                                 onChange={(date) => {
                                     setAbsentDates(date)
                                 }}
                             />
                         </Box>
-                        <HStack
-                            flexWrap={'wrap'}
-                            gap={6} w={'lg'}
-                        >
-                            {
-                                absentDates.map((date, key) => (
-                                    <Box
-                                        p={2}
-                                        bg={'aqua'}
-                                        key={key}
-                                        rounded={4}
-                                    >
-                                        {`${date.getDate()} ${date.getMonth()} ${date.getFullYear()}`}
-                                    </Box>
-                                ))
-                            }
-                        </HStack>
                         <Button colorScheme='twitter' my={8} onClick={updateAvailability}>Save</Button>
                     </Box>
 
@@ -174,7 +170,7 @@ const Dashboard = () => {
                             <Input value={value} onChange={e=>setValue(e.target.value)} type={'number'} bg={'#FFF'} />
                             <br /><br />
                             <FormLabel>Discount Type</FormLabel>
-                            <Select bg={'#FFF'}  value={type} onChange={value=>setCode(value)}>
+                            <Select bg={'#FFF'}  value={type} onChange={e=>setType(e.target.value)}>
                                 <option value="flat">Flat</option>
                                 <option value="percent">Percent</option>
                             </Select>
