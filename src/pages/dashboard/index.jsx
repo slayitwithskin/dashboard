@@ -31,10 +31,10 @@ const Dashboard = () => {
 
 
     useEffect(() => {
-        // if (!savedToken || !bcrypt.compare(savedToken, process.env.NEXT_PUBLIC_SALT)) {
-        //     Cookies.remove("authToken")
-        //     window.location.assign("/")
-        // }
+        if (!savedToken || !bcrypt.compare(savedToken, process.env.NEXT_PUBLIC_SALT)) {
+            Cookies.remove("authToken")
+            window.location.assign("/")
+        }
         getAvailability()
         getCoupons() 
     }, [])
