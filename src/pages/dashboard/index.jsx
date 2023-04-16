@@ -266,7 +266,6 @@ const Dashboard = () => {
                                         onChange={(appointmentDate) => setAppointment(appointmentDate)}
                                         options={{
                                             minDate: now.setDate(now.getDate() + 1),
-                                            maxDate: now.setDate(now.getDate() + 15),
                                             dateFormat: "d M Y",
                                             altInput: true,
                                             altInputClass: 'datepicker',
